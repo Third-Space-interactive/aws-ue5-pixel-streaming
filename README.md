@@ -1,2 +1,19 @@
-# aws-ue5-pixel-streaming
-💻 UE5 Pixel Streaming running on AWS
+# AWS/UE5 Pixel Streaming
+
+All of this is for testing purposes and shouldn't be deployed in production!
+
+## Need...
+Infra:
+- S3 Bucket and Cloudfront Distribution for the frontend
+- API Gateway and a Lambda function _(to launch an EC2 instance)_
+- EC2 Instance _(g4dn.xlarge)_ with a custom AMI _(with the UE5 executable)_
+
+Other:
+- Basic frontend (just a button and something to call the API and give back the instance IP)
+
+## How it works?
+1. On the frontend you request for an instance
+2. The request is forwarded to a Lambda trough an API Gateway
+3. The Lambda launch an EC2 instance and answer with the IP through the API Gateway
+4. The frontend show the IP
+5. Pixel Streaming! 🎉
