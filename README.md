@@ -4,13 +4,13 @@ All of this is for testing purposes and shouldn't be deployed in production!
 
 ## Need...
 Infra:
-- S3 Bucket and Cloudfront Distribution for the frontend
-- API Gateway and a Lambda function _(to launch an EC2 instance)_
-- EC2 Instance _(g4dn.xlarge)_ with a custom AMI _(with the UE5 executable)_
-- CloudWatch Alarm + Lambda _(when NetworkIn = 0 for 5 minutes on an instance, a Lambda is triggered to terminate the instance)_
+- [X] S3 Bucket and Cloudfront Distribution for the frontend
+- [ ] API Gateway and a Lambda function _(to launch an EC2 instance)_
+- [ ] EC2 Instance _(g4dn.xlarge)_ with a custom AMI _(with the UE5 executable)_
+- [ ] CloudWatch Alarm + Lambda _(when NetworkIn = 0 for 5 minutes on an instance, a Lambda is triggered to terminate the instance)_
 
 Other:
-- Basic frontend (just a button and something to call the API and give back the instance IP)
+- [ ] Basic frontend (just a button and something to call the API and give back the instance IP)
 
 ## How it works?
 1. On the frontend you request for an instance
