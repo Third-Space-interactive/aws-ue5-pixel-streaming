@@ -1,5 +1,14 @@
 locals {
+  bucket_name   = "aws-ue5-pixel-streaming-frontend"
   frontend_path = "${abspath(path.cwd)}/../frontend"
+
+  cloudfront_config = {
+    origin_id       = "frontend"
+    description     = "Cloudfront Distribution for the frontend"
+    cached_methods  = ["GET", "HEAD"]
+    allowed_methods = ["GET", "HEAD", "OPTIONS"]
+  }
+
   mime_types = {
     ".html" = "text/html"
     ".json" = "application/json"
@@ -16,7 +25,7 @@ locals {
 # S3 Bucket & S3 Configuration
 ###############
 resource "aws_s3_bucket" "bucket" {
-  bucket = var.bucket_name
+  bucket = local.bucket_name
 }
 
 resource "aws_s3_bucket_ownership_controls" "bucket_ownership_controls" {
@@ -31,7 +40,7 @@ resource "aws_s3_bucket_versioning" "bucket_versioning" {
   bucket = aws_s3_bucket.bucket.id
 
   versioning_configuration {
-    status = var.versionned ? "Enabled" : "Disabled"
+    status = "Disabled"
   }
 }
 
@@ -78,7 +87,7 @@ resource "aws_s3_bucket_policy" "bucket_policy" {
 resource "aws_cloudfront_distribution" "cloudfront_distribution" {
   enabled             = true
   wait_for_deployment = false
-  comment             = var.cloudfront_config.description
+  comment             = local.cloudfront_config.description
   price_class         = "PriceClass_100"
   default_root_object = "index.html"
 
@@ -95,7 +104,7 @@ resource "aws_cloudfront_distribution" "cloudfront_distribution" {
 
   origin {
     domain_name = aws_s3_bucket.bucket.bucket_regional_domain_name
-    origin_id   = var.cloudfront_config.origin_id
+    origin_id   = local.cloudfront_config.origin_id
 
     s3_origin_config {
       origin_access_identity = aws_cloudfront_origin_access_identity.oai.cloudfront_access_identity_path
@@ -103,9 +112,9 @@ resource "aws_cloudfront_distribution" "cloudfront_distribution" {
   }
 
   default_cache_behavior {
-    target_origin_id       = var.cloudfront_config.origin_id
-    allowed_methods        = var.cloudfront_config.allowed_methods
-    cached_methods         = var.cloudfront_config.cached_methods
+    target_origin_id       = local.cloudfront_config.origin_id
+    allowed_methods        = local.cloudfront_config.allowed_methods
+    cached_methods         = local.cloudfront_config.cached_methods
     viewer_protocol_policy = "allow-all"
   }
 }

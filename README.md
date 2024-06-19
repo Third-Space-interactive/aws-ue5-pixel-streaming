@@ -18,3 +18,8 @@ Other:
 3. The Lambda launch an EC2 instance and answer with the IP through the API Gateway
 4. The frontend show the IP
 5. Pixel Streaming! 🎉
+
+## How to?
+1. Create an AMI following the tutorial (TODO)
+2. Deploy terraform code
+3. Enjoy
