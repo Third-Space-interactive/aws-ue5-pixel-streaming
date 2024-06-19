@@ -1,1 +1,117 @@
-<h1>THIS IS MY WEBSITE LOL</h1>
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UE5 Pixel Streaming</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playwrite+PL:wght@100..400&family=Tiny5&display=swap"
+        rel="stylesheet">
+    <link rel="icon" href="favicon.png" type="image/png">
+    <script src="https://cdn.jsdelivr.net/npm/@tsparticles/confetti@3.0.3/tsparticles.confetti.bundle.min.js"></script>
+    <script src="main.js"></script>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #f8b500, #ec3750);
+        }
+
+        .button-container {
+            text-align: center;
+        }
+
+        .my-button {
+            background-color: #fff;
+            border: none;
+            color: #ec3750;
+            padding: 15px 30px;
+            font-size: 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+            font-family: "Tiny5", cursive;
+            font-weight: 400;
+            font-style: normal;
+            font-size: xx-large;
+        }
+
+        .my-button:hover {
+            transform: translateY(-3px);
+            background-color: #ffbe0d;
+            color: #fff;
+        }
+
+        .my-button:active {
+            transform: translateY(-1px);
+            background-color: #ec3750;
+            color: #fff;
+        }
+
+        .loader-container {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 50px;
+            opacity: 0;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .loader-container.show {
+            display: flex;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .loader {
+            border: 4px solid #f3f3f3;
+            /* Light grey */
+            border-top: 4px solid #ec3750;
+            /* Red */
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 2s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .loader-text {
+            font-size: xx-large;
+            font-family: "Tiny5", cursive;
+            font-weight: 400;
+            font-style: normal;
+            color: #fff;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="button-container" id="button-container">
+        <button class="my-button" onclick="loadData()">Request an instance</button>
+    </div>
+
+    <div class="loader-container" id="loader-container">
+        <div class="loader" id="loader"></div>
+        <div class="loader-text" id="loader-text">Loading...</div>
+    </div>
+</body>
+
+</html>
