@@ -29,7 +29,7 @@ resource "aws_subnet" "public_subnet" {
   map_public_ip_on_launch = true
 
   tags = {
-    Name = "public-subnet"
+    Name = "public-subnet-${count.index}"
   }
 }
 
@@ -77,7 +77,8 @@ resource "aws_security_group" "pixel_streaming_sg" {
 }
 
 data "aws_ami" "pixel_streaming_ami" {
-  name_regex = "amzn2-ami-kernel-*" //"ue5-pixel-streaming-*"
+  name_regex  = "amzn2-ami-kernel-*" //"ue5-pixel-streaming-*"
+  most_recent = true
 
   filter {
     name   = "architecture"
@@ -100,10 +101,6 @@ resource "aws_launch_template" "pixel_streaming_instance" {
   image_id               = data.aws_ami.pixel_streaming_ami.id
   instance_type          = "t2.micro" //"g4dn.xlarge"
   vpc_security_group_ids = [aws_security_group.pixel_streaming_sg.id]
-
-  network_interfaces {
-    associate_public_ip_address = true
-  }
 
   block_device_mappings {
     device_name = "/dev/xvda"

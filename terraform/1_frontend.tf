@@ -4,7 +4,7 @@ locals {
 
   cloudfront_config = {
     origin_id       = "frontend"
-    description     = "Cloudfront Distribution for the frontend"
+    description     = "Frontend Distribution"
     cached_methods  = ["GET", "HEAD"]
     allowed_methods = ["GET", "HEAD", "OPTIONS"]
   }
@@ -99,7 +99,6 @@ resource "aws_cloudfront_distribution" "cloudfront_distribution" {
 
   viewer_certificate {
     cloudfront_default_certificate = true
-    minimum_protocol_version       = "TLSv1.2_2021"
   }
 
   origin {
@@ -116,6 +115,14 @@ resource "aws_cloudfront_distribution" "cloudfront_distribution" {
     allowed_methods        = local.cloudfront_config.allowed_methods
     cached_methods         = local.cloudfront_config.cached_methods
     viewer_protocol_policy = "allow-all"
+
+    forwarded_values {
+      query_string = false
+
+      cookies {
+        forward = "none"
+      }
+    }
   }
 }
 

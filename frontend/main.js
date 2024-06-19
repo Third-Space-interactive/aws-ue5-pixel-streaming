@@ -9,7 +9,7 @@ const loaderTexts = [
 let loaderInterval;
 let currentIndex = 0;
 
-function loadData() {
+async function loadData() {
     const loaderContainer = document.getElementById('loader-container');
     const loaderText = document.getElementById('loader-text');
 
@@ -22,16 +22,31 @@ function loadData() {
     // Change loader text each 30 seconds
     loaderInterval = setInterval(() => {
         loaderText.textContent = loaderTexts[currentIndex];
-        currentIndex = (currentIndex + 1) % loaderTexts.length;
-    }, 10000);
+        if (currentIndex == loaderTexts.length - 1) {
+            currentIndex = 0
+        } else {
+            currentIndex = Math.round(Math.random() * (loaderTexts.length - 1));
+            console.log(currentIndex);
+        }
+    }, 15000);
 
-    // API Simulation
-    setTimeout(() => {
-        const fakeApiResponse = {
-            message: '<div>Here is your instance: <a href="https://google.com">google.com</a></div>'
-        };
-        showApiResult(fakeApiResponse);
-    }, 30000);
+    //API call
+    try {
+        const response = await fetch('https://i4tiulnqm7.execute-api.eu-central-1.amazonaws.com/api/create-instance', {
+            method: 'GET',
+            origin: 'frontend'
+        });
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        const apiResponse = await response.json();
+
+        showApiResult(apiResponse);
+    } catch (error) {
+        showApiResult({ message: `Error : ${error.message}` });
+    }
 }
 
 function showApiResult(response) {
@@ -51,7 +66,8 @@ function showApiResult(response) {
 
     // Display result
     const loaderText = document.getElementById('loader-text');
-    loaderText.innerHTML = response.message;
+    loaderText.innerHTML = "<div>Here is your instance: <a href='http://" + response.Ip + "'>" + response.Ip + "</a>!</div>";
+
     triggerConfetti();
 }
 

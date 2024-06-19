@@ -17,7 +17,7 @@ resource "aws_api_gateway_rest_api" "api" {
 resource "aws_api_gateway_resource" "create_instance" {
   rest_api_id = aws_api_gateway_rest_api.api.id
   parent_id   = aws_api_gateway_rest_api.api.root_resource_id
-  path_part   = "/create-instance"
+  path_part   = "create-instance"
 }
 
 resource "aws_api_gateway_method" "create_instance_endpoint" {
@@ -34,6 +34,8 @@ resource "aws_api_gateway_integration" "create_instance_endpoint" {
   integration_http_method = "POST"
   type                    = "AWS_PROXY"
   uri                     = aws_lambda_function.launch_instance_lambda.invoke_arn
+
+  depends_on = [aws_api_gateway_method.create_instance_endpoint]
 }
 
 resource "aws_api_gateway_deployment" "api_deployment" {
@@ -63,15 +65,34 @@ data "aws_iam_policy_document" "assume_role" {
   statement {
     actions = ["sts:AssumeRole"]
     principals {
-      type        = "AWS"
+      type        = "Service"
       identifiers = ["lambda.amazonaws.com"]
     }
   }
 }
 
+data "aws_iam_policy_document" "lambda_role_policy" {
+  statement {
+    actions = [
+      "ec2:RunInstances",
+      "ec2:DescribeInstances"
+    ]
+    resources = ["*"]
+  }
+}
+
+resource "aws_iam_policy" "lambda_role_policy" {
+  name   = "launch-instance-lambda-policy"
+  policy = data.aws_iam_policy_document.lambda_role_policy.json
+}
+
 resource "aws_iam_role" "lambda_role" {
   name               = "launch-instance-lambda-role"
   assume_role_policy = data.aws_iam_policy_document.assume_role.json
+  managed_policy_arns = [
+    "arn:aws:iam:aws:policy/service-role/AWSLambdaBasicExecutionRole",
+    aws_iam_policy.lambda_role_policy.arn
+  ]
 }
 
 data "archive_file" "lambda" {
@@ -93,7 +114,8 @@ resource "aws_lambda_function" "launch_instance_lambda" {
 
   environment {
     variables = {
-      LaunchTemplate = aws_launch_template.pixel_streaming_instance.arn
+      LaunchTemplateName = aws_launch_template.pixel_streaming_instance.arn
+      SubnetId           = aws_subnet.public_subnet[0].id
     }
   }
 }
@@ -106,5 +128,5 @@ resource "aws_lambda_permission" "endpoint_permission" {
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.launch_instance_lambda.function_name
   principal     = "apigateway.amazonaws.com"
-  source_arn    = "${aws_api_gateway_rest_api.api.execution_arn}/*/${aws_api_gateway_method.create_instance_endpoint.http_method}${aws_api_gateway_resource.create_instance.path_part}"
+  source_arn    = "${aws_api_gateway_rest_api.api.execution_arn}/*/${aws_api_gateway_method.create_instance_endpoint.http_method}/${aws_api_gateway_resource.create_instance.path_part}"
 }
