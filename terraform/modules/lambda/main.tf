@@ -14,7 +14,7 @@ data "aws_iam_policy_document" "assume_role" {
 resource "aws_iam_role" "lambda_role" {
   name                = "${var.name}lambda-role"
   assume_role_policy  = data.aws_iam_policy_document.assume_role.json
-  managed_policy_arns = concat(["arn:aws:iam:aws:policy/service-role/AWSLambdaBasicExecutionRole"], var.lambda.policies)
+  managed_policy_arns = concat(["arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"], var.lambda.policies)
 }
 
 ###############

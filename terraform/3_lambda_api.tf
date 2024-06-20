@@ -1,5 +1,5 @@
 locals {
-  launch_instance_lambda_path = "${abspath(path.cwd)}../lambda_functions/launch_instance.py"
+  launch_instance_lambda_path = "${abspath(path.cwd)}/../lambda_functions/launch_instance.py"
 }
 
 ###############
@@ -44,6 +44,8 @@ resource "aws_api_gateway_deployment" "api_deployment" {
   lifecycle {
     create_before_destroy = true
   }
+
+  depends_on = [aws_api_gateway_integration.create_instance_endpoint]
 }
 
 resource "aws_api_gateway_stage" "api_stage" {
@@ -65,7 +67,10 @@ data "aws_iam_policy_document" "lambda_api_role_policy" {
   statement {
     actions = [
       "ec2:RunInstances",
-      "ec2:DescribeInstances"
+      "ec2:DescribeInstances",
+      "ec2:CreateTags",
+      "cloudwatch:PutMetricAlarm",
+      "iam:CreateServiceLinkedRole"
     ]
     resources = ["*"]
   }
@@ -85,8 +90,9 @@ module "lambda_api" {
     handler  = "launch_instance.lambda_handler"
     policies = [aws_iam_policy.lambda_api_role_policy.arn]
     environment = {
-      LaunchTemplateName = aws_launch_template.pixel_streaming_instance.arn
+      LaunchTemplateName = aws_launch_template.pixel_streaming_instance.name
       SubnetId           = aws_subnet.public_subnet[0].id
+      CloudFrontDomain   = aws_cloudfront_distribution.cloudfront_distribution.domain_name
     }
   }
 }
