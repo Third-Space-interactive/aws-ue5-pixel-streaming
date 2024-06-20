@@ -77,7 +77,7 @@ resource "aws_security_group" "pixel_streaming_sg" {
 }
 
 data "aws_ami" "pixel_streaming_ami" {
-  name_regex  = "amzn2-ami-kernel-*" //"ue5-pixel-streaming-*"
+  name_regex  = "amzn2-ami-kernel-*" //"pixel-streaming-ami-*"
   most_recent = true
 
   filter {
