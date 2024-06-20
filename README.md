@@ -8,7 +8,7 @@ All of this is not suitable for production, it's just a proof of concept.
 3. The Lambda launch an EC2 instance and answer with the public IP of the instance
 4. The frontend show the IP
 5. Pixel Streaming! 🎉
-6. A Lambda function is triggered when the NetworkIn of an instance is 0 for 5 minutes and terminate the instance
+6. A Cloudwatch Alarm is set to terminate the instance if NetworkIn is less than 1MB/s for 5 minutes
 
 ## How to?
 1. Create an AMI following the tutorial using Packer (`cd ami && packer build .`)
