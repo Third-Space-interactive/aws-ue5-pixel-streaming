@@ -1,2 +1,9 @@
+# Ignore terraform state, lock and backup files
 .terraform
 .terraform.lock.hcl
+.terraform.tfstate.lock.info
+terraform.tfstate
+terraform.tfstate.backup
+
+# Ignore all zip files
+*.zip
