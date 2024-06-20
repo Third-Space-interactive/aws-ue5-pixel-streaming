@@ -11,7 +11,7 @@
         rel="stylesheet">
     <link rel="icon" href="favicon.png" type="image/png">
     <script src="https://cdn.jsdelivr.net/npm/@tsparticles/confetti@3.0.3/tsparticles.confetti.bundle.min.js"></script>
-    <script src="main.js"></script>
+    <script defer src="main.js"></script>
     <style>
         body {
             display: flex;
@@ -20,7 +20,6 @@
             align-items: center;
             height: 100vh;
             margin: 0;
-            font-family: 'Roboto', sans-serif;
             background: linear-gradient(135deg, #f8b500, #ec3750);
         }
 
@@ -35,6 +34,8 @@
             padding: 15px 30px;
             font-size: 20px;
             border-radius: 50px;
+            margin-left: 10px;
+            margin-right: 10px;
             cursor: pointer;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease;
@@ -54,6 +55,24 @@
             transform: translateY(-1px);
             background-color: #ec3750;
             color: #fff;
+        }
+
+        .disabled {
+            background-color: #f3f3f3;
+            color: #b3b3b3;
+            cursor: not-allowed;
+        }
+
+        .disabled:hover {
+            transform: none;
+            background-color: #f3f3f3;
+            color: #b3b3b3;
+        }
+
+        .disabled:active {
+            transform: none;
+            background-color: #f3f3f3;
+            color: #b3b3b3;
         }
 
         .loader-container {
@@ -100,17 +119,64 @@
             font-style: normal;
             color: #fff;
         }
+
+        .form-container {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-container input {
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 100%;
+            font-family: "Tiny5", cursive;
+            font-weight: 400;
+            font-style: normal;
+            font-size: x-large;
+        }
+
+        .form-container button {
+            background-color: #ec3750;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            font-family: "Tiny5", cursive;
+            font-weight: 400;
+            font-style: normal;
+            font-size: x-large;
+        }
+
+        .form-container button:hover {
+            background-color: #f8b500;
+        }
     </style>
 </head>
 
 <body>
     <div class="button-container" id="button-container">
-        <button class="my-button" onclick="loadData()">Request an instance</button>
+        <button class="my-button" id="my-button-1" onclick="loadData()">Request an instance</button>
+        <button class="my-button" id="my-button-2" onclick="toggleForm()">API Configuration</button>
     </div>
 
     <div class="loader-container" id="loader-container">
         <div class="loader" id="loader"></div>
         <div class="loader-text" id="loader-text">Loading...</div>
+    </div>
+
+    <div class="form-container" id="form-container">
+        <input type="text" id="api-url" placeholder="API URL">
+        <button onclick="toggleForm()">Confirm</button>
     </div>
 </body>
 
