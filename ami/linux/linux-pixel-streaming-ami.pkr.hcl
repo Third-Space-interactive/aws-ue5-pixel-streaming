@@ -13,7 +13,7 @@ locals {
 
 data "amazon-ami" "ami_id" {
   filters = {
-    name                = "amzn2-ami-kernel-*"
+    name                = "ubuntu-noble-24.04-*"
     architecture        = var.architecture
     virtualization-type = "hvm"
     root-device-type    = "ebs"

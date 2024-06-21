@@ -1,6 +1,7 @@
 locals {
-  vpc_cidr      = "10.1.0.0/16"
-  allowed_ports = [22, 80, 8080, 8888]
+  vpc_cidr       = "10.1.0.0/16"
+  allowed_ports  = [22, 80, 8080, 8888]
+  user_data_path = var.instance_os == "windows" ? "${abspath(path.cwd)}/../ami/windows/userdata.ps1" : "${abspath(path.cwd)}/../ami/linux/userdata.sh"
 }
 
 ###############
@@ -77,7 +78,7 @@ resource "aws_security_group" "pixel_streaming_sg" {
 }
 
 data "aws_ami" "pixel_streaming_ami" {
-  name_regex  = "amzn2-ami-kernel-*" //"pixel-streaming-ami-*"
+  name_regex  = "pixel-streaming-ami-${var.instance_os}-*"
   most_recent = true
 
   filter {
@@ -99,14 +100,15 @@ data "aws_ami" "pixel_streaming_ami" {
 resource "aws_launch_template" "pixel_streaming_instance" {
   name_prefix            = "ue5-pixel-stream-"
   image_id               = data.aws_ami.pixel_streaming_ami.id
-  instance_type          = "t2.micro" //"g4dn.xlarge"
+  instance_type          = "g4dn.xlarge"
   vpc_security_group_ids = [aws_security_group.pixel_streaming_sg.id]
+  user_data              = filebase64(local.user_data_path)
 
   block_device_mappings {
     device_name = "/dev/xvda"
 
     ebs {
-      volume_size = 20 //250
+      volume_size = 30
       volume_type = "gp2"
     }
   }
