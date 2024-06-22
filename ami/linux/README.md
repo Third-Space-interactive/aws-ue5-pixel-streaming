@@ -17,7 +17,7 @@ blacklist rivafb
 blacklist nvidiafb
 blacklist rivatv
 EOF
-cat "GRUB_CMDLINE_LINUX="rdblacklist=nouveau" | sudo tee --append /etc/default/grub
+echo 'GRUB_CMDLINE_LINUX="rdblacklist=nouveau"' | sudo tee --append /etc/default/grub
 sudo update-grub
 sudo apt-get install -y awscli
 aws s3 cp --recursive s3://ec2-linux-nvidia-drivers/latest/ .
@@ -37,3 +37,9 @@ sudo apt-get update -y
 sudo apt-get install -y vulkan-utils
 ```
 2. For Pulse Audio, run the following: `sudo apt-get install -y pulseaudio`
+
+# Run your Pixel Streaming App
+1. Clean the get_ps_server.sh script with `sed 's/\r$//' get_ps_server.sh > get_ps_server.sh` and run the script
+2. Run `<project_folder>\Linux\<project_name>\Samples\PixelStreaming\WebServers\SignallingWebServer\platform_scripts\cmd\Start_WithTURN_SignallingServer.sh` on one side
+3. Run `<project_folder>\Linux\<project_name>.sh -PixelStreamingIP=127.0.0.1 -PixelStreamingPort=8888 -RenderOffscreen -ResX=1920 -ResY=1080 -ForceRes` on the other side
+4. Connect to your instance public IP with a web browser and enjoy!
