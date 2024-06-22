@@ -7,3 +7,8 @@ variable "instance_os" {
     error_message = "Value should be either 'windows' or 'linux'"
   }
 }
+
+variable "my_ip" {
+  description = "Your public IP (check at https://nordvpn.com/fr/what-is-my-ip/)"
+  type        = string
+}

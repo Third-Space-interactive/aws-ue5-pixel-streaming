@@ -5,8 +5,8 @@
 terraform.tfstate
 terraform.tfstate.backup
 
-# Ignore zip file of lambda
-lambda_functions/*.zip
+# Ignore zip files
+*.zip
 
 # Ignore compiled UE5 project
 ue5-pixel-streaming-project/Linux

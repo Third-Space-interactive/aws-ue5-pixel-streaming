@@ -16,5 +16,5 @@ terraform {
 
 provider "aws" {
   region  = "eu-central-1"
-  profile = "numias-lfiori"
+  profile = "louis.fiori"
 }

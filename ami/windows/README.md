@@ -1,7 +1,7 @@
 # Install Nvidia GRID drivers
-1. Transfer application
+1. Transfer your application to your instance
 2. Open 80 port in Windows Firewall
-3. Run following script:
+3. Run following script with Powershell:
 ```
 $Bucket = "ec2-windows-nvidia-drivers"
 $KeyPrefix = "latest"
@@ -15,7 +15,7 @@ foreach ($Object in $Objects) {
    }
 }
 ```
-4. Install downloaded Nvidia GRID driver stored in `~\Desktop\NVIDIA`
+4. Install the downloaded Nvidia GRID driver stored in `~\Desktop\NVIDIA`
 
 # Install Pixel Streaming Infrastructure
 1. Run `<project_folder>\Windows\<project_name>\Samples\PixelStreaming\WebServers\get_ps_servers.bat`

@@ -1,6 +1,7 @@
 locals {
   vpc_cidr       = "10.1.0.0/16"
-  allowed_ports  = [22, 80, 8080, 8888]
+  connect_port   = var.instance_os == "windows" ? 3389 : 2
+  allowed_ports  = [local.connect_port, 80]
   user_data_path = var.instance_os == "windows" ? "${abspath(path.cwd)}/../ami/windows/userdata.ps1" : "${abspath(path.cwd)}/../ami/linux/userdata.sh"
 }
 
@@ -69,7 +70,7 @@ resource "aws_security_group" "pixel_streaming_sg" {
     for_each = local.allowed_ports
 
     content {
-      cidr_blocks = ["0.0.0.0/0"]
+      cidr_blocks = ["${var.my_ip}/32"]
       from_port   = ingress.value
       to_port     = ingress.value
       protocol    = "tcp"
