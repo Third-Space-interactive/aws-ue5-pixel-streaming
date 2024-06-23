@@ -1,6 +1,7 @@
 variable "instance_os" {
   description = "OS for the Pixel Streaming instance (either 'windows' or 'linux')"
   type        = string
+  default     = "linux"
 
   validation {
     condition     = var.instance_os == "windows" || var.instance_os == "linux"
@@ -16,9 +17,10 @@ variable "my_ip" {
 variable "region" {
   description = "AWS Region"
   type        = string
+  default     = "eu-west-3"
 
   validation {
-    condition     = contains([], var.region)
+    condition     = contains(["eu-west-3"], var.region)
     error_message = "Region should be: ..."
   }
 }
