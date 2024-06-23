@@ -12,3 +12,13 @@ variable "my_ip" {
   description = "Your public IP (check at https://nordvpn.com/fr/what-is-my-ip/)"
   type        = string
 }
+
+variable "region" {
+  description = "AWS Region"
+  type        = string
+
+  validation {
+    condition     = contains([], var.region)
+    error_message = "Region should be: ..."
+  }
+}

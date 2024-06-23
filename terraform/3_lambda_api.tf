@@ -93,6 +93,7 @@ module "lambda_api" {
       LaunchTemplateName = aws_launch_template.pixel_streaming_instance.name
       SubnetId           = aws_subnet.public_subnet[0].id
       CloudFrontDomain   = aws_cloudfront_distribution.cloudfront_distribution.domain_name
+      Region             = var.region
     }
   }
 }

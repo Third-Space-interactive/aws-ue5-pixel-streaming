@@ -43,7 +43,7 @@ def lambda_handler(event, context):
     Threshold = 1000,
     ComparisonOperator = 'LessThanThreshold',
     ActionsEnabled = True,
-    AlarmActions = ['arn:aws:automate:eu-central-1:ec2:terminate'],
+    AlarmActions = [f'arn:aws:automate:{environ["Region"]}:ec2:terminate'],
     Dimensions = [
       {
         'Name': 'InstanceId',
@@ -53,7 +53,7 @@ def lambda_handler(event, context):
   )
 
   if response['ResponseMetadata']['HTTPStatusCode'] == 200:
-    sleep(15)
+    sleep(5)
 
     # Get the instance's public IP address
     instance = ec2.describe_instances(

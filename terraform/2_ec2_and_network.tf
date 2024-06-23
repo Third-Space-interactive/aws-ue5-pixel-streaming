@@ -1,6 +1,6 @@
 locals {
   vpc_cidr       = "10.1.0.0/16"
-  connect_port   = var.instance_os == "windows" ? 3389 : 2
+  connect_port   = var.instance_os == "windows" ? 3389 : 22
   allowed_ports  = [local.connect_port, 80]
   user_data_path = var.instance_os == "windows" ? "${abspath(path.cwd)}/../ami/windows/userdata.ps1" : "${abspath(path.cwd)}/../ami/linux/userdata.sh"
 }
