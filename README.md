@@ -1,8 +1,12 @@
 # AWS/UE5 Pixel Streaming
 
+![pixel streaming gif](https://github.com/louis-fiori/aws-ue5-pixel-streaming/blob/main/images/pixel_streaming_gif.gif?raw=true)
+
 All of this is not suitable for production, it's just a proof of concept.
 
 ## How it works?
+![frontend](https://github.com/louis-fiori/aws-ue5-pixel-streaming/blob/main/images/frontend_capture_1.png?raw=true)
+
 1. On the frontend you request for an instance
 2. The request is forwarded to a Lambda trough an API Gateway
 3. The Lambda launch an EC2 instance and answer with the public IP of the instance
