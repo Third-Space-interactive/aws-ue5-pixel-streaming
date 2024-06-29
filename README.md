@@ -1,6 +1,7 @@
 # AWS/UE5 Pixel Streaming
-
-![pixel streaming gif](https://github.com/louis-fiori/aws-ue5-pixel-streaming/blob/main/images/pixel_streaming_gif.gif?raw=true)
+<p align="center">
+  <img src="https://github.com/louis-fiori/aws-ue5-pixel-streaming/blob/main/images/pixel_streaming_gif.gif?raw=true"/>
+</p>
 
 All of this is not suitable for production, it's just a proof of concept.
 
