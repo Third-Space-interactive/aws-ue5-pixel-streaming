@@ -8,6 +8,7 @@ variable "lambda" {
   type = object({
     path        = string
     handler     = string
+    runtime     = optional(string, "python3.11")
     timeout     = optional(number, 500)
     policies    = optional(list(string), [])
     environment = optional(map(string), {})

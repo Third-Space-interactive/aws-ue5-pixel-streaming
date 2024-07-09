@@ -30,7 +30,7 @@ resource "aws_lambda_function" "lambda" {
   function_name = var.name
   role          = aws_iam_role.lambda_role.arn
 
-  runtime = "python3.11"
+  runtime = var.lambda.runtime
   handler = var.lambda.handler
   timeout = var.lambda.timeout
 
@@ -38,7 +38,7 @@ resource "aws_lambda_function" "lambda" {
   source_code_hash = data.archive_file.lambda.output_base64sha256
 
   dynamic "environment" {
-    for_each = length(var.lambda.environment) > 0 ? [""] : [] # One block if var.environment is not empty
+    for_each = length(var.lambda.environment) > 0 ? [""] : []
     content {
       variables = var.lambda.environment
     }
