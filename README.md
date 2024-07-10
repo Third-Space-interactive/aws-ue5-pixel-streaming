@@ -5,9 +5,11 @@
 
 **⚠️ All of this is not suitable for production, it's just a proof of concept.**
 
+**If you have any problems, open an issue and I'll try my best to fix it.**
+
 ## 📝 Medium Article
 
-**COMING SOON**
+Article availaible [here](https://medium.com/@louis-fiori/unreal-engine-pixel-streaming-on-aws-building-a-homemade-cloud-gaming-prototype-41b90c72c5ce)
 
 ## ➡️ How to deploy
 1. **Create an AMI** following [this guide](https://github.com/louis-fiori/aws-ue5-pixel-streaming/blob/main/ami/README.md)
