@@ -1,6 +1,6 @@
 locals {
   bucket_name   = "aws-ue5-pixel-streaming-frontend"
-  frontend_path = "${abspath(path.cwd)}/../frontend"
+  frontend_path = "${abspath(path.cwd)}/frontend"
 
   cloudfront_config = {
     origin_id       = "frontend"
@@ -21,9 +21,7 @@ locals {
   }
 }
 
-###############
 # S3 Bucket & S3 Configuration
-###############
 resource "aws_s3_bucket" "bucket" {
   bucket = local.bucket_name
 }
@@ -60,9 +58,7 @@ resource "aws_s3_bucket_acl" "bucket_acl" {
   depends_on = [aws_s3_bucket_ownership_controls.bucket_ownership_controls]
 }
 
-###############
 # Cloudfront OAI
-###############
 resource "aws_cloudfront_origin_access_identity" "oai" {}
 
 data "aws_iam_policy_document" "bucket_access" {
@@ -81,9 +77,7 @@ resource "aws_s3_bucket_policy" "bucket_policy" {
   policy = data.aws_iam_policy_document.bucket_access.json
 }
 
-###############
 # Cloudfront Distribution
-###############
 resource "aws_cloudfront_distribution" "cloudfront_distribution" {
   enabled             = true
   wait_for_deployment = false
@@ -126,9 +120,7 @@ resource "aws_cloudfront_distribution" "cloudfront_distribution" {
   }
 }
 
-###############
 # Upload Frontend 
-###############
 resource "aws_s3_object" "frontend" {
   for_each = fileset(local.frontend_path, "**")
 

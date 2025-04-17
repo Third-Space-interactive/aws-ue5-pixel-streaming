@@ -1,5 +1,5 @@
 terraform {
-  required_version = "1.8.5"
+  required_version = "1.9.5"
 
   required_providers {
     aws = {
@@ -15,7 +15,6 @@ terraform {
 }
 
 provider "aws" {
-  region     = var.region
-  access_key = "<YOUR_AWS_ACCESS_KEY>"
-  secret_key = "<YOUR_AWS_SECRET_KEY>"
+  region  = var.region
+  profile = "YOUR_CLI_PROFILE"
 }

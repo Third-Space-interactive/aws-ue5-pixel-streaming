@@ -4,9 +4,7 @@ locals {
   user_data_path = "${abspath(path.cwd)}/../ami/userdata.sh"
 }
 
-###############
 # Network configuration
-###############
 resource "aws_vpc" "main_vpc" {
   enable_dns_hostnames = true
   enable_dns_support   = true
@@ -51,9 +49,7 @@ resource "aws_route_table_association" "public_rt_association" {
   subnet_id      = aws_subnet.public_subnet[count.index].id
 }
 
-###############
 # EC2 Launch Template
-###############
 resource "aws_security_group" "pixel_streaming_sg" {
   name   = "ue5-pixel-streaming"
   vpc_id = aws_vpc.main_vpc.id

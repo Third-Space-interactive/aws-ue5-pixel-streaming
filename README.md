@@ -1,6 +1,6 @@
 # UE5 Pixel Streaming powered by AWS
 <p align="center">
-  <img src="https://github.com/louis-fiori/aws-ue5-pixel-streaming/blob/main/images/pixel_streaming_gif.gif?raw=true"/>
+  <img src="https://github.com/louis-fiori/aws-ue5-pixel-streaming/blob/main/assets/pixel_streaming_gif.gif?raw=true"/>
 </p>
 
 **⚠️ All of this is not suitable for production, it's just a proof of concept.**
@@ -26,5 +26,5 @@ Article availaible [here](https://medium.com/@louis-fiori/unreal-engine-pixel-st
 9. **Access the instance** by clicking on the public IP displayed by the frontend and enjoy!
 
 <p align="center">
-  <img src="https://github.com/louis-fiori/aws-ue5-pixel-streaming/blob/main/images/frontend_capture_1.png?raw=true"/>
+  <img src="https://github.com/louis-fiori/aws-ue5-pixel-streaming/blob/main/assets/frontend_capture_1.png?raw=true"/>
 </p>

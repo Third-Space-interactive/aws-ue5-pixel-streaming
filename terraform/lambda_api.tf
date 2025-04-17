@@ -1,10 +1,8 @@
 locals {
-  launch_instance_lambda_path = "${abspath(path.cwd)}/../lambda_functions/launch_instance.py"
+  launch_instance_lambda_path = "${abspath(path.cwd)}/lambda_functions/launch_instance.py"
 }
 
-###############
 # API Gateway
-###############
 resource "aws_api_gateway_rest_api" "api" {
   name              = "backend"
   put_rest_api_mode = "merge"
@@ -33,7 +31,7 @@ resource "aws_api_gateway_integration" "create_instance_endpoint" {
   http_method             = "GET"
   integration_http_method = "POST"
   type                    = "AWS_PROXY"
-  uri                     = module.lambda_api.invoke_arn
+  uri                     = aws_lambda_function.lambda.invoke_arn
 
   depends_on = [aws_api_gateway_method.create_instance_endpoint]
 }
@@ -57,12 +55,10 @@ resource "aws_api_gateway_stage" "api_stage" {
     ignore_changes = [deployment_id]
   }
 
-  depends_on = [module.lambda_api]
+  depends_on = [aws_lambda_function.lambda]
 }
 
-###############
-# Lambda
-###############
+# Lambda IAM Role
 data "aws_iam_policy_document" "lambda_api_role_policy" {
   statement {
     actions = [
@@ -81,15 +77,45 @@ resource "aws_iam_policy" "lambda_api_role_policy" {
   policy = data.aws_iam_policy_document.lambda_api_role_policy.json
 }
 
-module "lambda_api" {
-  source = "./modules/lambda"
+data "aws_iam_policy_document" "assume_role" {
+  statement {
+    actions = ["sts:AssumeRole"]
+    principals {
+      type        = "Service"
+      identifiers = ["lambda.amazonaws.com"]
+    }
+  }
+}
 
-  name = "launch-instance"
-  lambda = {
-    path     = local.launch_instance_lambda_path
-    handler  = "launch_instance.lambda_handler"
-    policies = [aws_iam_policy.lambda_api_role_policy.arn]
-    environment = {
+resource "aws_iam_role" "lambda_role" {
+  name               = "launch-instance-lambda-role"
+  assume_role_policy = data.aws_iam_policy_document.assume_role.json
+  managed_policy_arns = [
+    "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+    aws_iam_policy.lambda_api_role_policy.arn
+  ]
+}
+
+# Lambda Function
+data "archive_file" "lambda" {
+  type        = "zip"
+  source_file = local.launch_instance_lambda_path
+  output_path = replace(local.launch_instance_lambda_path, ".py", ".zip")
+}
+
+resource "aws_lambda_function" "lambda" {
+  function_name = "launch-instance"
+  role          = aws_iam_role.lambda_role.arn
+
+  runtime = "python3.11"
+  handler = "launch_instance.lambda_handler"
+  timeout = 500
+
+  filename         = data.archive_file.lambda.output_path
+  source_code_hash = data.archive_file.lambda.output_base64sha256
+
+  environment {
+    variables = {
       LaunchTemplateName = aws_launch_template.pixel_streaming_instance.name
       SubnetId           = aws_subnet.public_subnet[0].id
       CloudFrontDomain   = aws_cloudfront_distribution.cloudfront_distribution.domain_name
@@ -98,9 +124,7 @@ module "lambda_api" {
   }
 }
 
-###############
 # Lambda Permission
-###############
 resource "aws_lambda_permission" "allow_api_gateway_to_invoke_lambda" {
   statement_id  = "AllowApiGatewayInvocation"
   action        = "lambda:InvokeFunction"
