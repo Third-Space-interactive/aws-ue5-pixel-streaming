@@ -39,7 +39,7 @@ def lambda_handler(event, context):
     MetricName = 'NetworkIn',
     Statistic = 'Average',
     Period = 60,
-    EvaluationPeriods = 5,
+    EvaluationPeriods = 2,
     Threshold = 1000,
     ComparisonOperator = 'LessThanThreshold',
     ActionsEnabled = True,
