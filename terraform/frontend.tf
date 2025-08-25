@@ -1,5 +1,5 @@
 locals {
-  bucket_name   = "aws-ue5-pixel-streaming-frontend"
+  bucket_name   = "aws-ue5-pixel-streaming-frontend-${random_id.bucket_suffix.hex}"
   frontend_path = "${abspath(path.cwd)}/frontend"
 
   cloudfront_config = {
@@ -19,6 +19,11 @@ locals {
     ".css"  = "text/css"
     ".txt"  = "text/plain"
   }
+}
+
+# Random suffix for unique bucket name
+resource "random_id" "bucket_suffix" {
+  byte_length = 4
 }
 
 # S3 Bucket & S3 Configuration

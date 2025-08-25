@@ -74,8 +74,13 @@ resource "aws_security_group" "pixel_streaming_sg" {
 }
 
 data "aws_ami" "pixel_streaming_ami" {
-  name_regex  = "pixel-streaming-ami-linux-*"
   most_recent = true
+  owners      = ["self"]
+
+  filter {
+    name   = "name"
+    values = ["pixel-streaming-ami-linux-*"]
+  }
 
   filter {
     name   = "architecture"

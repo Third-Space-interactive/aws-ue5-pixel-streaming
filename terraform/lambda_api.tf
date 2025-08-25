@@ -128,7 +128,7 @@ resource "aws_lambda_function" "lambda" {
 resource "aws_lambda_permission" "allow_api_gateway_to_invoke_lambda" {
   statement_id  = "AllowApiGatewayInvocation"
   action        = "lambda:InvokeFunction"
-  function_name = "launch-instance"
+  function_name = aws_lambda_function.lambda.function_name
   principal     = "apigateway.amazonaws.com"
   source_arn    = "${aws_api_gateway_rest_api.api.execution_arn}/*/${aws_api_gateway_method.create_instance_endpoint.http_method}/${aws_api_gateway_resource.create_instance.path_part}"
 }
