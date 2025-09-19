@@ -98,17 +98,17 @@ function launchStreamingApp(ip) {
 
     // Show iframe container
     const iframeContainer = document.getElementById('iframe-container');
-    const streamingIframe = document.getElementById('streaming-iframe');
+    const pixelStreamingFrame = document.getElementById('pixelStreamingFrame');
     const loadingOverlay = document.getElementById('loading-overlay');
     
     iframeContainer.classList.add('show');
     
     // Set iframe source with parameters
     const streamingUrl = `http://${ip}:80/?HoverMouse=True&AutoConnect=True`;
-    streamingIframe.src = streamingUrl;
+    pixelStreamingFrame.src = streamingUrl;
     
     // Handle iframe load event
-    streamingIframe.onload = function() {
+    pixelStreamingFrame.onload = function() {
         // Hide loading overlay after iframe loads
         setTimeout(() => {
             loadingOverlay.style.display = 'none';
@@ -118,7 +118,7 @@ function launchStreamingApp(ip) {
     };
     
     // Handle iframe error
-    streamingIframe.onerror = function() {
+    pixelStreamingFrame.onerror = function() {
         loadingOverlay.innerHTML = `
             <div style="text-align: center;">
                 <div style="font-size: 1.5rem; margin-bottom: 1rem;">Connection Failed</div>
@@ -135,8 +135,8 @@ function closeStreaming() {
     iframeContainer.classList.remove('show');
     
     // Reset iframe
-    const streamingIframe = document.getElementById('streaming-iframe');
-    streamingIframe.src = '';
+    const pixelStreamingFrame = document.getElementById('pixelStreamingFrame');
+    pixelStreamingFrame.src = '';
     
     // Show loading overlay again for next time
     const loadingOverlay = document.getElementById('loading-overlay');

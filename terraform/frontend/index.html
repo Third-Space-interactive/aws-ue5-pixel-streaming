@@ -34,7 +34,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-image: url('frontend_1700Spot.webp');
+            background-image: url('1700spo_frontend.webp');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -278,7 +278,13 @@
             display: block;
         }
 
-        .streaming-iframe {
+        .game-container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        #pixelStreamingFrame {
             width: 100%;
             height: 100%;
             border: none;
@@ -402,7 +408,15 @@
             <div class="loader"></div>
             <div>Connecting to streaming application...</div>
         </div>
-        <iframe class="streaming-iframe" id="streaming-iframe" src="" allowfullscreen></iframe>
+        <div id="gameContainer" class="game-container">
+            <iframe
+                id="pixelStreamingFrame"
+                src="blank:auto"
+                allowfullscreen
+                title="Pixel Streaming"
+                allow="autoplay; fullscreen; gamepad; microphone; camera"
+            ></iframe>
+        </div>
     </div>
 </body>
 
