@@ -69,26 +69,104 @@ function showApiResult(response) {
         toggleForm();
     }
 
-    // Hide loader
-    const loader = document.getElementById('loader');
-    loader.style.display = 'none';
-
-    // Hide button
-    const button = document.getElementById('button-container')
-    button.style.display = 'none';
-
-    // Remove margin
-    const loaderContainer = document.getElementById('loader-container');
-    loaderContainer.style.marginTop = 0;
-
-    // Display result
-    const loaderText = document.getElementById('loader-text');
     if (response.message) {
+        // Hide loader
+        const loader = document.getElementById('loader');
+        loader.style.display = 'none';
+
+        // Hide button
+        const button = document.getElementById('button-container')
+        button.style.display = 'none';
+
+        // Remove margin
+        const loaderContainer = document.getElementById('loader-container');
+        loaderContainer.style.marginTop = 0;
+
+        // Display error result
+        const loaderText = document.getElementById('loader-text');
         loaderText.innerHTML = "<div>" + response.message + "</div>";
     } else {
-        loaderText.innerHTML = "<div>Here is your instance: <a href='http://" + response.Ip + "'>" + response.Ip + "</a>!</div>";
-        triggerConfetti();
+        // Launch iframe with streaming application
+        launchStreamingApp(response.Ip);
     }
+}
+
+function launchStreamingApp(ip) {
+    // Hide the main interface
+    const container = document.querySelector('.container');
+    container.style.display = 'none';
+
+    // Show iframe container
+    const iframeContainer = document.getElementById('iframe-container');
+    const streamingIframe = document.getElementById('streaming-iframe');
+    const loadingOverlay = document.getElementById('loading-overlay');
+    
+    iframeContainer.classList.add('show');
+    
+    // Set iframe source with parameters
+    const streamingUrl = `http://${ip}:80/?HoverMouse=True&AutoConnect=True`;
+    streamingIframe.src = streamingUrl;
+    
+    // Handle iframe load event
+    streamingIframe.onload = function() {
+        // Hide loading overlay after iframe loads
+        setTimeout(() => {
+            loadingOverlay.style.display = 'none';
+        }, 2000); // Give a 2-second delay for the streaming to establish
+        
+        triggerConfetti();
+    };
+    
+    // Handle iframe error
+    streamingIframe.onerror = function() {
+        loadingOverlay.innerHTML = `
+            <div style="text-align: center;">
+                <div style="font-size: 1.5rem; margin-bottom: 1rem;">Connection Failed</div>
+                <div>Unable to connect to streaming application</div>
+                <button onclick="closeStreaming()" style="margin-top: 1rem; padding: 10px 20px; background: #ff7b00; color: white; border: none; border-radius: 5px; cursor: pointer;">Try Again</button>
+            </div>
+        `;
+    };
+}
+
+function closeStreaming() {
+    // Hide iframe container
+    const iframeContainer = document.getElementById('iframe-container');
+    iframeContainer.classList.remove('show');
+    
+    // Reset iframe
+    const streamingIframe = document.getElementById('streaming-iframe');
+    streamingIframe.src = '';
+    
+    // Show loading overlay again for next time
+    const loadingOverlay = document.getElementById('loading-overlay');
+    loadingOverlay.style.display = 'flex';
+    loadingOverlay.innerHTML = `
+        <div class="loader"></div>
+        <div>Connecting to streaming application...</div>
+    `;
+    
+    // Show main interface again
+    const container = document.querySelector('.container');
+    container.style.display = 'flex';
+    
+    // Reset buttons
+    const button_one = document.getElementById('my-button-1');
+    const button_two = document.getElementById('my-button-2');
+    button_one.classList.remove('disabled');
+    button_two.classList.remove('disabled');
+    
+    // Reset loader container
+    const loaderContainer = document.getElementById('loader-container');
+    loaderContainer.style.display = 'none';
+    loaderContainer.classList.remove('show');
+    
+    // Reset button container
+    const buttonContainer = document.getElementById('button-container');
+    buttonContainer.style.display = 'flex';
+    
+    // Reset lock
+    lock = false;
 }
 
 function triggerConfetti() {
@@ -110,3 +188,13 @@ function toggleForm() {
         }
     }
 }
+
+// Optional: Handle escape key to close streaming
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+        const iframeContainer = document.getElementById('iframe-container');
+        if (iframeContainer.classList.contains('show')) {
+            closeStreaming();
+        }
+    }
+});

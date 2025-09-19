@@ -18,6 +18,7 @@ locals {
     ".svg"  = "image/svg+xml"
     ".css"  = "text/css"
     ".txt"  = "text/plain"
+    ".webp" = "image/webp"  
   }
 }
 
